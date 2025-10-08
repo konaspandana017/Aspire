@@ -1,1 +1,14 @@
  
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "React Components Project"
+        }
+    ],
+    "settings": {
+        "emmet.includeLanguages": {
+            "javascript": "javascriptreact"
+        }
+    }
+}
