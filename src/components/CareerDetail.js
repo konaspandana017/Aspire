@@ -1,87 +1,125 @@
- 
 import React, { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import './ProductDetail.css';
+import './CareerDetail.css';
 
-const ProductDetail = () => {
+const CareerDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
   
-  // Mock product data - in real app, this would come from API
-  const products = [
+  const careers = [
     {
       id: 1,
-      name: "Wireless Bluetooth Headphones",
-      price: 99.99,
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
-      description: "High-quality wireless headphones with noise cancellation technology. Perfect for music lovers and professionals.",
-      features: ["Noise Cancellation", "30hr Battery", "Comfort Fit", "Bluetooth 5.0"],
-      category: "electronics"
+      name: "Software Engineering Career",
+      price: 49.99,
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400",
+      description: "Software engineering is one of the most in-demand careers today. Our expert counselors will guide you through the path to becoming a successful software developer, from learning programming fundamentals to securing your dream job.",
+      features: ["High Salary Potential ($80K-$150K)", "Remote Work Opportunities", "Global Job Market", "Continuous Learning & Growth", "Problem Solving Skills", "Creative Project Work"],
+      category: "technology",
+      demand: "Very High",
+      growth: "22% (2020-2030)",
+      duration: "4-6 years",
+      averageSalary: "$110,000"
     },
     {
       id: 2,
-      name: "Smart Fitness Watch",
-      price: 199.99,
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
-      description: "Advanced fitness tracking with heart rate monitor, GPS, and smart notifications.",
-      features: ["Heart Rate Monitor", "GPS Tracking", "Water Resistant", "Sleep Tracking"],
-      category: "electronics"
+      name: "Data Science Career Path",
+      price: 59.99,
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
+      description: "Data science combines statistics, computer science, and domain knowledge to extract insights from data. It's one of the fastest-growing fields with applications across all industries.",
+      features: ["AI/ML Integration", "Research Opportunities", "High Growth Potential", "Big Data Analytics", "Business Intelligence", "Statistical Modeling"],
+      category: "technology",
+      demand: "High",
+      growth: "31% (2020-2030)",
+      duration: "4-5 years", 
+      averageSalary: "$120,000"
+    },
+    {
+      id: 3,
+      name: "Business Management Career",
+      price: 39.99,
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400",
+      description: "Develop leadership skills and strategic thinking to drive business success in various industries and organizational settings.",
+      features: ["Leadership Development", "Strategic Planning", "Team Management", "Business Analytics", "Networking Opportunities", "Career Advancement"],
+      category: "business",
+      demand: "High",
+      growth: "8% (2020-2030)",
+      duration: "4 years",
+      averageSalary: "$85,000"
     }
   ];
 
-  const product = products.find(p => p.id === parseInt(id));
+  const career = careers.find(p => p.id === parseInt(id));
 
-  if (!product) {
+  if (!career) {
     return (
       <div className="container">
-        <div className="product-not-found">
-          <h2>Product not found</h2>
+        <div className="career-not-found">
+          <h2>Career path not found</h2>
           <button onClick={() => navigate('/')} className="btn btn-primary">
-            Back to Products
+            Back to Career Paths
           </button>
         </div>
       </div>
     );
   }
 
-  const handleAddToCart = () => {
-    addToCart(product);
-    alert(`${product.name} added to cart!`);
+  const handleBookSession = () => {
+    addToCart(career);
+    alert(`Career counseling session booked for ${career.name}!`);
   };
 
   return (
     <div className="container">
       <button onClick={() => navigate('/')} className="btn btn-secondary back-btn">
-        ← Back to Products
+        ← Back to Career Paths
       </button>
       
-      <div className="product-detail">
-        <div className="product-image">
-          <img src={product.image} alt={product.name} />
+      <div className="career-detail">
+        <div className="career-image">
+          <img src={career.image} alt={career.name} />
         </div>
         
-        <div className="product-info">
-          <h1 className="product-title">{product.name}</h1>
-          <div className="product-price">${product.price}</div>
-          <p className="product-description">{product.description}</p>
+        <div className="career-info">
+          <h1 className="career-title">{career.name}</h1>
+          <div className="career-price">${career.price}/session</div>
+          <p className="career-description">{career.description}</p>
           
-          <div className="product-features">
-            <h3>Features:</h3>
+          <div className="career-stats">
+            <div className="stat">
+              <span className="stat-label">Market Demand:</span>
+              <span className="stat-value">{career.demand}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-label">Job Growth:</span>
+              <span className="stat-value">{career.growth}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-label">Average Salary:</span>
+              <span className="stat-value">{career.averageSalary}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-label">Typical Duration:</span>
+              <span className="stat-value">{career.duration}</span>
+            </div>
+          </div>
+          
+          <div className="career-features">
+            <h3>Career Benefits & Opportunities:</h3>
             <ul>
-              {product.features.map((feature, index) => (
+              {career.features.map((feature, index) => (
                 <li key={index}>{feature}</li>
               ))}
             </ul>
           </div>
           
-          <div className="product-actions">
-            <button onClick={handleAddToCart} className="btn btn-primary add-to-cart-btn">
-              Add to Cart
+          <div className="career-actions">
+            <button onClick={handleBookSession} className="btn btn-primary add-to-cart-btn">
+              Book Career Counseling Session
             </button>
-            <button onClick={() => navigate('/cart')} className="btn btn-secondary">
-              View Cart
+            <button onClick={() => navigate('/sessions')} className="btn btn-secondary">
+              View My Sessions
             </button>
           </div>
         </div>
@@ -90,4 +128,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default CareerDetail;
