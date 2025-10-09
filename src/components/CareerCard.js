@@ -16,8 +16,8 @@ const ProductCard = ({ product }) => {
   return (
     <Link to={`/product/${product.id}`} className="product-card-link">
       <div className="card product-card">
-        <img 
-          src={product.image} 
+        <img
+          src={product.image}
           alt={product.name}
           className="card-image"
         />
@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
           <h3 className="card-title">{product.name}</h3>
           <p className="card-description">{product.description}</p>
           <div className="card-price">${product.price}</div>
-          <button 
+          <button
             className="btn btn-primary btn-full"
             onClick={handleAddToCart}
           >
@@ -38,3 +38,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+
