@@ -34,6 +34,19 @@ const CareerDetail = () => {
       growth: "31% (2020-2030)",
       duration: "4-5 years", 
       averageSalary: "$120,000"
+    },
+    {
+      id: 3,
+      name: "Business Management Career",
+      price: 39.99,
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400",
+      description: "Develop leadership skills and strategic thinking to drive business success in various industries and organizational settings.",
+      features: ["Leadership Development", "Strategic Planning", "Team Management", "Business Analytics", "Networking Opportunities", "Career Advancement"],
+      category: "business",
+      demand: "High",
+      growth: "8% (2020-2030)",
+      duration: "4 years",
+      averageSalary: "$85,000"
     }
   ];
 

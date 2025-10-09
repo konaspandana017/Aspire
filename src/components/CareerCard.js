@@ -1,34 +1,35 @@
+// ProductCard Component 
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import './CareerCard.css';
+import './ProductCard.css';
 
-const CareerCard = ({ career }) => {
+const ProductCard = ({ product }) => {
   const { addToCart } = useContext(CartContext);
 
-  const handleBookSession = (e) => {
+  const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(career);
+    addToCart(product);
   };
 
   return (
-    <Link to={`/career/${career.id}`} className="career-card-link">
-      <div className="card career-card">
-        <img 
-          src={career.image} 
-          alt={career.name}
+    <Link to={`/product/${product.id}`} className="product-card-link">
+      <div className="card product-card">
+        <img
+          src={product.image}
+          alt={product.name}
           className="card-image"
         />
         <div className="card-content">
-          <h3 className="card-title">{career.name}</h3>
-          <p className="card-description">{career.description}</p>
-          <div className="card-price">${career.price}/session</div>
-          <button 
+          <h3 className="card-title">{product.name}</h3>
+          <p className="card-description">{product.description}</p>
+          <div className="card-price">${product.price}</div>
+          <button
             className="btn btn-primary btn-full"
-            onClick={handleBookSession}
+            onClick={handleAddToCart}
           >
-            Book Session
+            Add to Cart
           </button>
         </div>
       </div>
@@ -36,4 +37,5 @@ const CareerCard = ({ career }) => {
   );
 };
 
-export default CareerCard;
+export default ProductCard;
+

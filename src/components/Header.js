@@ -4,8 +4,8 @@ import { CartContext } from '../context/CartContext';
 import './Header.css';
 
 const Header = () => {
-  const { cartItems } = useContext(CartContext);
-  const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const { cartItems = [] } = useContext(CartContext);
+  const sessionCount = cartItems.reduce((total, item) => total + (item.quantity || 0), 0);
 
   return (
     <header className="header">
@@ -16,7 +16,7 @@ const Header = () => {
         <div className="nav-links">
           <Link to="/" className="nav-link">Career Paths</Link>
           <Link to="/sessions" className="nav-link cart-link">
-            My Sessions {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
+            My Sessions {sessionCount > 0 && <span className="cart-count">{sessionCount}</span>}
           </Link>
         </div>
       </nav>

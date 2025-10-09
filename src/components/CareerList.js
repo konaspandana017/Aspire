@@ -1,13 +1,73 @@
+<<<<<<< HEAD
+// ProductList Component 
+import React, { useState, useEffect } from 'react';
+import ProductCard from './ProductCard';
+import './ProductList.css';
+
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+=======
 import React, { useState, useEffect } from 'react';
 import CareerCard from './CareerCard';
 import './CareerList.css';
 
 const CareerList = () => {
   const [careers, setCareers] = useState([]);
+>>>>>>> main
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
+<<<<<<< HEAD
+    const mockProducts = [
+      {
+        id: 1,
+        name: "Wireless Bluetooth Headphones",
+        price: 99.99,
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+        description: "High-quality wireless headphones with noise cancellation",
+        category: "electronics"
+      },
+      {
+        id: 2,
+        name: "Smart Fitness Watch",
+        price: 199.99,
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+        description: "Advanced fitness tracking with heart rate monitor",
+        category: "electronics"
+      },
+      {
+        id: 3,
+        name: "Organic Cotton T-Shirt",
+        price: 29.99,
+        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+        description: "Comfortable and sustainable cotton t-shirt",
+        category: "clothing"
+      },
+      {
+        id: 4,
+        name: "Professional Camera",
+        price: 899.99,
+        image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400",
+        description: "4K video recording and professional photography",
+        category: "electronics"
+      },
+      {
+        id: 5,
+        name: "Designer Backpack",
+        price: 79.99,
+        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400",
+        description: "Durable and stylish backpack for everyday use",
+        category: "accessories"
+      },
+      {
+        id: 6,
+        name: "Running Shoes",
+        price: 129.99,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+        description: "Lightweight running shoes with superior cushioning",
+        category: "footwear"
+=======
     const mockCareers = [
       {
         id: 1,
@@ -62,36 +122,60 @@ const CareerList = () => {
         description: "Create visual content and build brands through design",
         category: "creative",
         features: ["Creative Freedom", "Freelance Options", "Portfolio Work", "Visual Storytelling"]
+>>>>>>> main
       }
     ];
 
     setTimeout(() => {
+<<<<<<< HEAD
+      setProducts(mockProducts);
+=======
       setCareers(mockCareers);
+>>>>>>> main
       setLoading(false);
     }, 1000);
   }, []);
 
+<<<<<<< HEAD
+  const filteredProducts = filter === 'all' 
+    ? products 
+    : products.filter(product => product.category === filter);
+
+  const categories = ['all', ...new Set(products.map(product => product.category))];
+=======
   const filteredCareers = filter === 'all' 
     ? careers 
     : careers.filter(career => career.category === filter);
 
   const categories = ['all', ...new Set(careers.map(career => career.category))];
+>>>>>>> main
 
   if (loading) {
     return (
       <div className="container">
+<<<<<<< HEAD
+        <div className="loading">Loading products...</div>
+=======
         <div className="loading">Loading career paths...</div>
+>>>>>>> main
       </div>
     );
   }
 
   return (
     <div className="container">
+<<<<<<< HEAD
+      <div className="product-list-header">
+        <h1>Our Products</h1>
+        <div className="filter-controls">
+          <label htmlFor="category-filter">Filter by category:</label>
+=======
       <div className="career-list-header">
         <h1>Explore Career Paths</h1>
         <p className="subtitle">Find your perfect career with expert guidance</p>
         <div className="filter-controls">
           <label htmlFor="category-filter">Filter by field:</label>
+>>>>>>> main
           <select 
             id="category-filter"
             value={filter} 
@@ -108,6 +192,16 @@ const CareerList = () => {
       </div>
       
       <div className="grid grid-3">
+<<<<<<< HEAD
+        {filteredProducts.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+      
+      {filteredProducts.length === 0 && (
+        <div className="no-products">
+          No products found in this category.
+=======
         {filteredCareers.map(career => (
           <CareerCard key={career.id} career={career} />
         ))}
@@ -116,10 +210,15 @@ const CareerList = () => {
       {filteredCareers.length === 0 && (
         <div className="no-careers">
           No career paths found in this category.
+>>>>>>> main
         </div>
       )}
     </div>
   );
 };
 
+<<<<<<< HEAD
+export default ProductList;
+=======
 export default CareerList;
+>>>>>>> main
