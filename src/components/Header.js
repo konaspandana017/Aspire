@@ -1,4 +1,3 @@
- 
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
@@ -12,12 +11,12 @@ const Header = () => {
     <header className="header">
       <nav className="navbar">
         <Link to="/" className="logo">
-          ShopEase
+          CareerGuide
         </Link>
         <div className="nav-links">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/cart" className="nav-link cart-link">
-            Cart {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
+          <Link to="/" className="nav-link">Career Paths</Link>
+          <Link to="/sessions" className="nav-link cart-link">
+            My Sessions {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
           </Link>
         </div>
       </nav>
