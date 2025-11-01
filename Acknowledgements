@@ -1,0 +1,37 @@
+# Acknowledgements
+
+We want to give special thanks to all contributors, tools, and inspirations that made Aspire possible.
+
+## Project Contributors
+- **@GOLLASAISREE** – CSS styling, responsive design
+- **@YerrabothulaNavyaSree09** – Feature implementation, testing
+- **Spandana Kona (konaspandana017)** – Project lead, backend and frontend integration
+
+## Libraries & Frameworks
+- **NodeJS** – Backend server environment
+- **CSS Frameworks** – Responsive and accessible design
+- **JavaScript Libraries** – Dynamic user interface components
+- **Webpack & npm** – Build and dependency management
+
+## Inspirations
+- Career guidance websites
+- Student mentorship programs
+- Modern web app design principles
+
+## Contribution Guidelines
+- Fork the repository and create a new branch for your changes
+- Submit a detailed pull request describing your work
+- Attribute any external libraries, assets, or code snippets you include
+- Follow existing project coding style for consistency
+
+## License
+- Aspire is licensed under the MIT License. See `LICENSE` for details.
+
+## Additional Notes
+- Aspire aims to help students explore career paths, connect with counselors, and access curated resources
+- Admins can manage resources, track engagement, and support student growth
+- The project is actively maintained and open to contributions from the community
+
+---
+
+Thank you to everyone who supports Aspire and the open-source community.
