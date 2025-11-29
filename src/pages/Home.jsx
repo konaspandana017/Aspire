@@ -198,15 +198,21 @@ const Home = ({ user, onLogout }) => {
                   textAlign: 'center'
                 }}
               >
-                <img 
-                  src="/static/images/career-hero.svg" 
-                  altCareer Guidance"
-                  style={{ 
-                    maxWidth: '100%', 
-                    height: 'auto',
-                    filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.1))'
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: 300,
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    borderRadius: 4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 120,
+                    color: 'rgba(255,255,255,0.3)'
                   }}
-                />
+                >
+                  🚀
+                </Box>
               </Box>
             </Grid>
           </Grid>
@@ -386,7 +392,9 @@ const Home = ({ user, onLogout }) => {
               <Card sx={{ p: 3, height: '100%' }}>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                    <Avatar src={story.avatar} sx={{ width: 60, height: 60, mr: 2 }} />
+                    <Avatar sx={{ width: 60, height: 60, mr: 2, backgroundColor: 'primary.main' }}>
+                      {story.name.charAt(0)}
+                    </Avatar>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                         {story.name}
