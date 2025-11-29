@@ -1,225 +1,182 @@
 import React, { useState } from 'react';
+import { Container, Paper, Typography, Button, RadioGroup, FormControlLabel, Radio, Box, LinearProgress, Card, CardContent } from '@mui/material';
 
-const CareerQuiz = () => {
+const CareerQuiz = ({ onComplete }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
 
   const questions = [
     {
+      id: 1,
       question: "What type of activities do you enjoy most?",
       options: [
-        "Working with technology and computers",
-        "Helping and supporting people",
-        "Creative arts and design",
-        "Analyzing data and solving problems"
+        "Solving complex problems and coding",
+        "Helping and guiding people",
+        "Creative design and artistic work",
+        "Analyzing data and research"
       ]
     },
     {
+      id: 2,
       question: "What's your preferred work environment?",
       options: [
-        "Office with modern technology",
-        "Helping people directly",
-        "Creative and flexible space",
-        "Research lab or analytical setting"
+        "Tech company or startup",
+        "Educational or healthcare institution",
+        "Creative agency or studio",
+        "Research lab or corporate office"
       ]
     },
     {
-      question: "Which skills do you feel most confident about?",
+      id: 3,
+      question: "Which skills do you excel at?",
       options: [
-        "Programming and technical skills",
+        "Programming and logical thinking",
         "Communication and empathy",
         "Design and creativity",
-        "Logical thinking and analysis"
+        "Analysis and critical thinking"
+      ]
+    },
+    {
+      id: 4,
+      question: "What motivates you at work?",
+      options: [
+        "Building innovative products",
+        "Making a difference in people's lives",
+        "Expressing creativity and ideas",
+        "Discovering insights and patterns"
       ]
     }
   ];
 
   const careerMatches = {
-    technical: {
-      title: "Technology Careers",
-      careers: ["Software Developer", "Data Scientist", "IT Specialist", "Cybersecurity Analyst"],
-      description: "You enjoy working with technology and solving technical challenges."
-    },
-    helping: {
-      title: "Helping Professions", 
-      careers: ["Teacher", "Counselor", "Healthcare Worker", "Social Worker"],
-      description: "You have strong empathy and enjoy supporting others."
-    },
-    creative: {
-      title: "Creative Fields",
-      careers: ["Graphic Designer", "Writer", "Artist", "Marketing Specialist"],
-      description: "You're imaginative and enjoy expressing creativity."
-    },
-    analytical: {
-      title: "Analytical Roles",
-      careers: ["Researcher", "Analyst", "Scientist", "Engineer"],
-      description: "You love digging deep into data and solving complex problems."
-    }
+    'Software Engineering': ['A', 'A', 'A', 'A'],
+    'Career Counseling': ['B', 'B', 'B', 'B'],
+    'UX/UI Design': ['C', 'C', 'C', 'C'],
+    'Data Science': ['D', 'D', 'D', 'D']
   };
 
   const handleAnswer = (answer) => {
-    const newAnswers = [...answers, answer];
+    const newAnswers = { ...answers, [currentQuestion]: answer };
     setAnswers(newAnswers);
 
-    if (currentQuestion + 1 < questions.length) {
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      setShowResults(true);
+      calculateResults(newAnswers);
     }
   };
 
-  const calculateCareer = () => {
-    // Simple scoring based on answer patterns
-    const techKeywords = ['technology', 'computers', 'programming', 'technical'];
-    const helpKeywords = ['helping', 'supporting', 'communication', 'empathy'];
-    const creativeKeywords = ['creative', 'design', 'arts', 'flexible'];
-    const analyticKeywords = ['analyzing', 'solving', 'logical', 'research'];
+  const calculateResults = (userAnswers) => {
+    setShowResults(true);
+    if (onComplete) {
+      onComplete(userAnswers);
+    }
+  };
 
-    let scores = { technical: 0, helping: 0, creative: 0, analytical: 0 };
-
-    answers.forEach(answer => {
-      const lowerAnswer = answer.toLowerCase();
-      if (techKeywords.some(keyword => lowerAnswer.includes(keyword))) scores.technical++;
-      if (helpKeywords.some(keyword => lowerAnswer.includes(keyword))) scores.helping++;
-      if (creativeKeywords.some(keyword => lowerAnswer.includes(keyword))) scores.creative++;
-      if (analyticKeywords.some(keyword => lowerAnswer.includes(keyword))) scores.analytical++;
+  const getCareerRecommendations = () => {
+    const scores = {};
+    
+    Object.keys(careerMatches).forEach(career => {
+      scores[career] = 0;
+      careerMatches[career].forEach((expectedAnswer, index) => {
+        if (answers[index] === expectedAnswer) {
+          scores[career] += 25;
+        }
+      });
     });
 
-    // Get top 2 career matches
-    const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    return [careerMatches[sortedScores[0][0]], careerMatches[sortedScores[1][0]]];
+    return Object.entries(scores)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 3);
   };
 
-  const restartQuiz = () => {
-    setCurrentQuestion(0);
-    setAnswers([]);
-    setShowResults(false);
-  };
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   if (showResults) {
-    const [primaryMatch, secondaryMatch] = calculateCareer();
+    const recommendations = getCareerRecommendations();
     
     return (
-      <div style={styles.quizContainer}>
-        <h2>🎯 Your Career Assessment Results</h2>
-        
-        <div style={styles.results}>
-          <div style={styles.primaryResult}>
-            <h3>Best Match: {primaryMatch.title}</h3>
-            <p>{primaryMatch.description}</p>
-            <h4>Suggested Careers:</h4>
-            <ul>
-              {primaryMatch.careers.map((career, index) => (
-                <li key={index}>{career}</li>
-              ))}
-            </ul>
-          </div>
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h4" gutterBottom align="center">
+            🎉 Your Career Matches
+          </Typography>
+          <Typography variant="h6" color="text.secondary" align="center" sx={{ mb: 4 }}>
+            Based on your interests and skills
+          </Typography>
 
-          <div style={styles.secondaryResult}>
-            <h3>Also Consider: {secondaryMatch.title}</h3>
-            <p>{secondaryMatch.description}</p>
-            <h4>Related Careers:</h4>
-            <ul>
-              {secondaryMatch.careers.map((career, index) => (
-                <li key={index}>{career}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+          {recommendations.map(([career, score], index) => (
+            <Card key={career} sx={{ mb: 2, border: index === 0 ? 2 : 0, borderColor: 'primary.main' }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h6">
+                    {index + 1}. {career}
+                  </Typography>
+                  <Typography variant="h6" color="primary">
+                    {score}% Match
+                  </Typography>
+                </Box>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={score} 
+                  sx={{ mt: 1, height: 8, borderRadius: 4 }}
+                />
+              </CardContent>
+            </Card>
+          ))}
 
-        <button style={styles.restartButton} onClick={restartQuiz}>
-          Take Quiz Again
-        </button>
-      </div>
+          <Button 
+            variant="contained" 
+            fullWidth 
+            sx={{ mt: 3 }}
+            onClick={() => window.location.href = '/career-paths'}
+          >
+            Explore These Careers
+          </Button>
+        </Paper>
+      </Container>
     );
   }
 
   return (
-    <div style={styles.quizContainer}>
-      <h2>Career Assessment Quiz</h2>
-      <div style={styles.progress}>
-        Question {currentQuestion + 1} of {questions.length}
-      </div>
-      
-      <div style={styles.questionCard}>
-        <h3>{questions[currentQuestion].question}</h3>
-        <div style={styles.options}>
-          {questions[currentQuestion].options.map((option, index) => (
-            <button
-              key={index}
-              style={styles.optionButton}
-              onClick={() => handleAnswer(option)}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+          Question {currentQuestion + 1} of {questions.length}
+        </Typography>
+        <LinearProgress variant="determinate" value={progress} sx={{ mb: 3, height: 8 }} />
+        
+        <Typography variant="h5" gutterBottom sx={{ mb: 4 }}>
+          {questions[currentQuestion].question}
+        </Typography>
 
-const styles = {
-  quizContainer: {
-    maxWidth: '600px',
-    margin: '2rem auto',
-    padding: '2rem',
-    background: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  progress: {
-    textAlign: 'center',
-    color: '#667eea',
-    fontWeight: '600',
-    marginBottom: '1rem',
-  },
-  questionCard: {
-    textAlign: 'center',
-  },
-  options: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-    marginTop: '2rem',
-  },
-  optionButton: {
-    padding: '1rem',
-    border: '2px solid #e2e8f0',
-    borderRadius: '8px',
-    background: 'white',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-  },
-  results: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '2rem',
-    margin: '2rem 0',
-  },
-  primaryResult: {
-    padding: '1.5rem',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    color: 'white',
-    borderRadius: '12px',
-  },
-  secondaryResult: {
-    padding: '1.5rem',
-    border: '2px solid #667eea',
-    borderRadius: '12px',
-  },
-  restartButton: {
-    padding: '12px 24px',
-    background: '#48bb78',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    marginTop: '1rem',
-  },
+        <RadioGroup>
+          {questions[currentQuestion].options.map((option, index) => (
+            <Button
+              key={index}
+              variant="outlined"
+              fullWidth
+              sx={{ 
+                mb: 2, 
+                p: 2, 
+                justifyContent: 'flex-start',
+                textTransform: 'none'
+              }}
+              onClick={() => handleAnswer(String.fromCharCode(65 + index))}
+            >
+              <FormControlLabel
+                value={option}
+                control={<Radio />}
+                label={option}
+                sx={{ width: '100%' }}
+              />
+            </Button>
+          ))}
+        </RadioGroup>
+      </Paper>
+    </Container>
+  );
 };
 
 export default CareerQuiz;
