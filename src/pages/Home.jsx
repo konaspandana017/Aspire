@@ -11,19 +11,22 @@ import {
   Avatar,
   Stack,
   Paper,
-  alpha
+  alpha,
+  Fade
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { 
-  School, 
+  Psychology, 
   ConnectWithoutContact, 
   Assignment, 
-  Psychology,
   TrendingUp,
-  Groups,
   EmojiEvents,
   Star,
-  PlayArrow
+  PlayCircle,
+  School,
+  Work,
+  Groups,
+  RocketLaunch
 } from '@mui/icons-material';
 import Header from '../components/Header';
 import CareerQuiz from '../components/CareerQuiz';
@@ -33,68 +36,64 @@ const Home = ({ user, onLogout }) => {
 
   const features = [
     { 
-      icon: <Psychology fontSize="large" />, 
-      title: 'Career Assessment', 
-      desc: 'Take our scientific assessment to discover careers that match your personality and skills',
-      link: '#',
-      buttonText: 'Start Assessment',
-      action: () => setShowQuiz(true),
-      color: '#2563eb'
+      icon: <Psychology sx={{ fontSize: 40 }} />, 
+      title: 'Smart Assessment', 
+      desc: 'AI-powered career assessment that matches your personality with ideal career paths',
+      color: '#6366f1'
     },
     { 
-      icon: <ConnectWithoutContact fontSize="large" />, 
-      title: 'Expert Counseling', 
-      desc: '1-on-1 sessions with certified career counselors specializing in various industries',
-      link: '/counseling',
-      buttonText: 'Book Session',
-      color: '#7c3aed'
-    },
-    { 
-      icon: <Assignment fontSize="large" />, 
-      title: 'Learning Resources', 
-      desc: 'Access guides, video courses, and templates to build your career skills',
-      link: '/resources',
-      buttonText: 'Explore Resources',
+      icon: <ConnectWithoutContact sx={{ fontSize: 40 }} />, 
+      title: 'Expert Guidance', 
+      desc: '1-on-1 sessions with industry professionals and career counselors',
       color: '#10b981'
+    },
+    { 
+      icon: <Assignment sx={{ fontSize: 40 }} />, 
+      title: 'Learning Paths', 
+      desc: 'Structured courses and resources to build skills for your chosen career',
+      color: '#f59e0b'
+    },
+    { 
+      icon: <Work sx={{ fontSize: 40 }} />, 
+      title: 'Job Ready', 
+      desc: 'Resume building, interview prep, and job placement assistance',
+      color: '#ef4444'
     }
   ];
 
   const stats = [
-    { number: '10,000+', label: 'Students Helped' },
-    { number: '50+', label: 'Career Experts' },
-    { number: '95%', label: 'Success Rate' },
-    { number: '4.9/5', label: 'User Rating' }
+    { icon: <Groups />, number: '10K+', label: 'Students Transformed' },
+    { icon: <School />, number: '95%', label: 'Success Rate' },
+    { icon: <Star />, number: '4.9/5', label: 'User Rating' },
+    { icon: <TrendingUp />, number: '50+', label: 'Career Experts' }
   ];
 
-  const successStories = [
+  const quickActions = [
+    { title: 'Take Assessment', desc: 'Discover your career matches', icon: '🧩', link: '#', action: () => setShowQuiz(true), color: '#6366f1' },
+    { title: 'Browse Careers', desc: 'Explore 100+ career paths', icon: '🔍', link: '/career-paths', color: '#10b981' },
+    { title: 'Book Session', desc: 'Talk to career experts', icon: '💬', link: '/counseling', color: '#f59e0b' },
+    { title: 'Resources', desc: 'Learning materials & guides', icon: '📚', link: '/resources', color: '#8b5cf6' }
+  ];
+
+  const testimonials = [
     {
-      name: 'Sarah M.',
-      role: 'Software Engineer at Google',
-      story: 'Aspire helped me transition from marketing to tech. The career assessment pinpointed my strengths!',
-      avatar: '/static/images/avatar/1.jpg',
-      rating: 5
+      name: 'Alex Chen',
+      role: 'Software Engineer → Google',
+      text: 'Aspire helped me transition from biology to tech. The assessment was incredibly accurate!',
+      avatar: 'A'
     },
     {
-      name: 'James K.',
-      role: 'Data Scientist at Netflix',
-      story: 'The counseling sessions and resources were invaluable for my career change journey.',
-      avatar: '/static/images/avatar/2.jpg',
-      rating: 5
+      name: 'Sarah Johnson',
+      role: 'Marketing Student → Apple',
+      text: 'The career counseling sessions gave me the confidence to pursue my dream job at Apple.',
+      avatar: 'S'
     },
     {
-      name: 'Emily R.',
-      role: 'UX Designer at Apple',
-      story: 'Found my perfect career path through the assessment and expert guidance.',
-      avatar: '/static/images/avatar/3.jpg',
-      rating: 5
+      name: 'Mike Rodriguez',
+      role: 'Teacher → Data Scientist',
+      text: 'Complete career change made possible through Aspire learning paths and mentorship.',
+      avatar: 'M'
     }
-  ];
-
-  const popularCareers = [
-    { title: 'Software Engineering', demand: 'Very High', salary: '$100K+', growth: '22%' },
-    { title: 'Data Science', demand: 'Very High', salary: '$95K+', growth: '31%' },
-    { title: 'UX/UI Design', demand: 'High', salary: '$85K+', growth: '13%' },
-    { title: 'Digital Marketing', demand: 'Medium', salary: '$65K+', growth: '10%' }
   ];
 
   if (showQuiz) {
@@ -107,372 +106,363 @@ const Home = ({ user, onLogout }) => {
   }
 
   return (
-    <div>
+    <div style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', minHeight: '100vh' }}>
       <Header user={user} onLogout={onLogout} />
       
       {/* Hero Section */}
-      <Box
-        sx={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          py: { xs: 8, md: 12 },
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
+      <Box sx={{ py: { xs: 6, md: 10 }, background: 'white' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={4} alignItems="center">
+          <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Chip 
-                label="🚀 Trusted by 10,000+ Students" 
-                sx={{ 
-                  backgroundColor: 'rgba(255,255,255,0.2)', 
-                  color: 'white', 
-                  mb: 3,
-                  fontWeight: 'bold'
-                }} 
-              />
-              <Typography 
-                variant="h2" 
-                gutterBottom 
-                sx={{ 
-                  fontWeight: 'bold',
-                  fontSize: { xs: '2.5rem', md: '3.5rem' },
-                  lineHeight: 1.2
-                }}
-              >
-                Find Your Perfect Career Path
-              </Typography>
-              <Typography 
-                variant="h5" 
-                sx={{ 
-                  mb: 4, 
-                  opacity: 0.9,
-                  fontSize: { xs: '1.2rem', md: '1.5rem' }
-                }}
-              >
-                AI-powered career assessment, expert counseling, and personalized guidance to launch your dream career.
-              </Typography>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <Button 
-                  variant="contained" 
-                  size="large"
-                  onClick={() => setShowQuiz(true)}
-                  sx={{ 
-                    py: 2, 
-                    px: 4,
-                    backgroundColor: 'white',
-                    color: '#667eea',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      backgroundColor: '#f8fafc'
-                    }
-                  }}
-                >
-                  Start Free Assessment
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  size="large"
-                  component={Link}
-                  to="/career-paths"
-                  sx={{ 
-                    py: 2, 
-                    px: 4,
-                    borderColor: 'white',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255,255,255,0.1)'
-                    }
-                  }}
-                >
-                  Explore Careers
-                </Button>
-              </Stack>
+              <Fade in timeout={1000}>
+                <Box>
+                  <Chip 
+                    icon={<RocketLaunch />}
+                    label="Transform Your Career Journey" 
+                    color="primary" 
+                    sx={{ mb: 3, fontWeight: 'bold', py: 1 }}
+                  />
+                  <Typography 
+                    variant="h2" 
+                    sx={{ 
+                      fontWeight: 'bold',
+                      fontSize: { xs: '2.5rem', md: '3.5rem' },
+                      lineHeight: 1.1,
+                      mb: 2,
+                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent'
+                    }}
+                  >
+                    Discover Your Perfect Career Path
+                  </Typography>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      mb: 4, 
+                      color: 'text.secondary',
+                      lineHeight: 1.6,
+                      fontSize: { xs: '1.1rem', md: '1.25rem' }
+                    }}
+                  >
+                    AI-powered career guidance, expert mentorship, and personalized learning paths to help you build the career you love.
+                  </Typography>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <Button 
+                      variant="contained" 
+                      size="large"
+                      onClick={() => setShowQuiz(true)}
+                      startIcon={<Psychology />}
+                      sx={{ 
+                        py: 2, 
+                        px: 4,
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                        fontWeight: 'bold',
+                        fontSize: '1.1rem',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, #5b5cea 0%, #7c4df0 100%)',
+                          transform: 'translateY(-2px)'
+                        }
+                      }}
+                    >
+                      Start Free Assessment
+                    </Button>
+                    <Button 
+                      variant="outlined" 
+                      size="large"
+                      component={Link}
+                      to="/career-paths"
+                      startIcon={<PlayCircle />}
+                      sx={{ 
+                        py: 2, 
+                        px: 4,
+                        fontWeight: 'bold',
+                        fontSize: '1.1rem',
+                        borderWidth: 2,
+                        '&:hover': {
+                          borderWidth: 2,
+                          transform: 'translateY(-2px)'
+                        }
+                      }}
+                    >
+                      Explore Careers
+                    </Button>
+                  </Stack>
+                </Box>
+              </Fade>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  position: 'relative',
-                  textAlign: 'center'
-                }}
-              >
+              <Fade in timeout={1500}>
                 <Box
                   sx={{
-                    width: '100%',
-                    height: 300,
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    borderRadius: 4,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 120,
-                    color: 'rgba(255,255,255,0.3)'
+                    position: 'relative',
+                    textAlign: 'center'
                   }}
                 >
-                  🚀
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: 400,
+                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      borderRadius: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: -50,
+                        left: -50,
+                        width: 100,
+                        height: 100,
+                        background: 'rgba(255,255,255,0.1)',
+                        borderRadius: '50%'
+                      },
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        bottom: -30,
+                        right: -30,
+                        width: 80,
+                        height: 80,
+                        background: 'rgba(255,255,255,0.1)',
+                        borderRadius: '50%'
+                      }
+                    }}
+                  >
+                    <Box sx={{ textAlign: 'center', zIndex: 1 }}>
+                      <Typography variant="h1" sx={{ fontSize: 80, mb: 2 }}>
+                        🚀
+                      </Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                        Your Career Journey Starts Here
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
+              </Fade>
             </Grid>
           </Grid>
         </Container>
       </Box>
 
       {/* Stats Section */}
-      <Container sx={{ py: 6 }}>
-        <Grid container spacing={3} justifyContent="center">
+      <Container sx={{ py: 8 }}>
+        <Grid container spacing={4}>
           {stats.map((stat, index) => (
-            <Grid item xs={6} sm={3} key={index}>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'primary.main', mb: 1 }}>
-                  {stat.number}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  {stat.label}
-                </Typography>
-              </Box>
+            <Grid item xs={6} md={3} key={index}>
+              <Fade in timeout={800 + index * 200}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Box
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      mx: 'auto',
+                      mb: 2
+                    }}
+                  >
+                    {stat.icon}
+                  </Box>
+                  <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'text.primary', mb: 1 }}>
+                    {stat.number}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 'medium' }}>
+                    {stat.label}
+                  </Typography>
+                </Box>
+              </Fade>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+      {/* Quick Actions */}
+      <Container sx={{ py: 8 }}>
+        <Typography variant="h3" align="center" sx={{ fontWeight: 'bold', mb: 1 }}>
+          Get Started in Minutes
+        </Typography>
+        <Typography variant="h6" align="center" color="text.secondary" sx={{ mb: 6, maxWidth: 600, mx: 'auto' }}>
+          Quick actions to jumpstart your career journey
+        </Typography>
+
+        <Grid container spacing={3}>
+          {quickActions.map((action, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Fade in timeout={1000 + index * 200}>
+                <Card 
+                  sx={{ 
+                    textAlign: 'center', 
+                    p: 3,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    border: `2px solid ${alpha(action.color, 0.1)}`,
+                    background: `linear-gradient(135deg, ${alpha(action.color, 0.05)} 0%, ${alpha(action.color, 0.02)} 100%)`,
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      border: `2px solid ${alpha(action.color, 0.3)}`,
+                      boxShadow: `0 20px 40px ${alpha(action.color, 0.15)}`
+                    }
+                  }}
+                  onClick={action.action || (() => window.location.href = action.link)}
+                >
+                  <CardContent>
+                    <Typography variant="h2" sx={{ mb: 2 }}>
+                      {action.icon}
+                    </Typography>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: action.color }}>
+                      {action.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {action.desc}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Fade>
             </Grid>
           ))}
         </Grid>
       </Container>
 
       {/* Features Section */}
-      <Container sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
-            How Aspire Helps You Succeed
-          </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-            From career discovery to job placement, we provide comprehensive support at every step
-          </Typography>
-        </Box>
-
-        <Grid container spacing={4}>
-          {features.map((feature, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Card 
-                sx={{ 
-                  height: '100%', 
-                  textAlign: 'center', 
-                  p: 4,
-                  transition: '0.3s',
-                  border: `2px solid ${alpha(feature.color, 0.1)}`,
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: `0 20px 40px ${alpha(feature.color, 0.15)}`,
-                    border: `2px solid ${alpha(feature.color, 0.3)}`
-                  }
-                }}
-              >
-                <CardContent>
-                  <Box
-                    sx={{
-                      backgroundColor: alpha(feature.color, 0.1),
-                      color: feature.color,
-                      width: 80,
-                      height: 80,
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      mx: 'auto',
-                      mb: 3
-                    }}
-                  >
-                    {feature.icon}
-                  </Box>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-                    {feature.title}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary" sx={{ mb: 3, minHeight: '72px' }}>
-                    {feature.desc}
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    size="large"
-                    component={feature.action ? undefined : Link}
-                    to={feature.action ? undefined : feature.link}
-                    onClick={feature.action}
-                    sx={{
-                      backgroundColor: feature.color,
-                      px: 4,
-                      py: 1.5,
-                      '&:hover': {
-                        backgroundColor: feature.color,
-                        transform: 'translateY(-2px)'
-                      }
-                    }}
-                  >
-                    {feature.buttonText}
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
-      {/* Popular Careers Section */}
-      <Box sx={{ backgroundColor: '#f8fafc', py: 8 }}>
+      <Box sx={{ py: 8, background: 'white' }}>
         <Container>
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
-              Explore In-Demand Careers
-            </Typography>
-            <Typography variant="h6" color="text.secondary">
-              Discover high-growth career paths with excellent opportunities
-            </Typography>
-          </Box>
+          <Typography variant="h3" align="center" sx={{ fontWeight: 'bold', mb: 1 }}>
+            How Aspire Works
+          </Typography>
+          <Typography variant="h6" align="center" color="text.secondary" sx={{ mb: 6, maxWidth: 600, mx: 'auto' }}>
+            A complete ecosystem for your career development
+          </Typography>
 
-          <Grid container spacing={3}>
-            {popularCareers.map((career, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Paper 
-                  sx={{ 
-                    p: 3, 
-                    textAlign: 'center',
-                    transition: '0.3s',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      boxShadow: 4
-                    }
-                  }}
-                >
-                  <TrendingUp sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
-                    {career.title}
-                  </Typography>
-                  <Chip 
-                    label={career.demand} 
-                    color={career.demand === 'Very High' ? 'error' : 'success'}
-                    size="small"
-                    sx={{ mb: 1 }}
-                  />
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Salary: {career.salary}
-                  </Typography>
-                  <Typography variant="body2" color="primary" sx={{ fontWeight: 'bold' }}>
-                    Growth: {career.growth}
-                  </Typography>
-                </Paper>
+          <Grid container spacing={4}>
+            {features.map((feature, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <Fade in timeout={1200 + index * 200}>
+                  <Card sx={{ p: 3, height: '100%' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
+                      <Box
+                        sx={{
+                          width: 60,
+                          height: 60,
+                          borderRadius: '50%',
+                          background: `linear-gradient(135deg, ${feature.color} 0%, ${alpha(feature.color, 0.7)} 100%)`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: 'white',
+                          flexShrink: 0
+                        }}
+                      >
+                        {feature.icon}
+                      </Box>
+                      <Box>
+                        <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: feature.color }}>
+                          {feature.title}
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary">
+                          {feature.desc}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Card>
+                </Fade>
               </Grid>
             ))}
           </Grid>
-
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Button 
-              variant="outlined" 
-              size="large"
-              component={Link}
-              to="/career-paths"
-              sx={{ px: 4 }}
-            >
-              View All Career Paths
-            </Button>
-          </Box>
         </Container>
       </Box>
 
-      {/* Success Stories */}
+      {/* Testimonials */}
       <Container sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
-            Success Stories
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            Hear from students who transformed their careers with Aspire
-          </Typography>
-        </Box>
+        <Typography variant="h3" align="center" sx={{ fontWeight: 'bold', mb: 1 }}>
+          Success Stories
+        </Typography>
+        <Typography variant="h6" align="center" color="text.secondary" sx={{ mb: 6 }}>
+          See how Aspire has transformed careers
+        </Typography>
 
         <Grid container spacing={4}>
-          {successStories.map((story, index) => (
+          {testimonials.map((testimonial, index) => (
             <Grid item xs={12} md={4} key={index}>
-              <Card sx={{ p: 3, height: '100%' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                    <Avatar sx={{ width: 60, height: 60, mr: 2, backgroundColor: 'primary.main' }}>
-                      {story.name.charAt(0)}
-                    </Avatar>
-                    <Box>
-                      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                        {story.name}
-                      </Typography>
-                      <Typography variant="body2" color="primary">
-                        {story.role}
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
-                        {[...Array(story.rating)].map((_, i) => (
-                          <Star key={i} sx={{ fontSize: 16, color: 'warning.main' }} />
-                        ))}
+              <Fade in timeout={1400 + index * 200}>
+                <Card sx={{ p: 3, height: '100%' }}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                      <Avatar 
+                        sx={{ 
+                          width: 60, 
+                          height: 60, 
+                          mr: 2,
+                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                          fontWeight: 'bold',
+                          fontSize: '1.2rem'
+                        }}
+                      >
+                        {testimonial.avatar}
+                      </Avatar>
+                      <Box>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          {testimonial.name}
+                        </Typography>
+                        <Typography variant="body2" color="primary" sx={{ fontWeight: 'medium' }}>
+                          {testimonial.role}
+                        </Typography>
                       </Box>
                     </Box>
-                  </Box>
-                  <Typography variant="body1" color="text.secondary" fontStyle="italic">
-                    "{story.story}"
-                  </Typography>
-                </CardContent>
-              </Card>
+                    <Typography variant="body1" color="text.secondary" fontStyle="italic" sx={{ lineHeight: 1.6 }}>
+                      "{testimonial.text}"
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Fade>
             </Grid>
           ))}
         </Grid>
       </Container>
 
-      {/* CTA Section */}
-      <Box
-        sx={{
-          background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-          color: 'white',
-          py: 8,
-          textAlign: 'center'
-        }}
-      >
+      {/* Final CTA */}
+      <Box sx={{ py: 8, background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' }}>
         <Container maxWidth="md">
-          <EmojiEvents sx={{ fontSize: 64, mb: 3, color: 'gold' }} />
-          <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
-            Ready to Start Your Career Journey?
-          </Typography>
-          <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-            Join thousands of students who have found their dream careers with Aspire
-          </Typography>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
-            <Button 
-              variant="contained" 
-              size="large"
-              onClick={() => setShowQuiz(true)}
-              sx={{ 
-                py: 2, 
-                px: 4,
-                backgroundColor: 'white',
-                color: '#4f46e5',
-                fontWeight: 'bold',
-                '&:hover': {
-                  backgroundColor: '#f8fafc'
-                }
-              }}
-            >
-              Start Free Assessment
-            </Button>
-            <Button 
-              variant="outlined" 
-              size="large"
-              component={Link}
-              to="/counseling"
-              sx={{ 
-                py: 2, 
-                px: 4,
-                borderColor: 'white',
-                color: 'white',
-                fontWeight: 'bold',
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }
-              }}
-            >
-              Book Expert Session
-            </Button>
-          </Stack>
+          <Fade in timeout={1600}>
+            <Box sx={{ textAlign: 'center', color: 'white' }}>
+              <EmojiEvents sx={{ fontSize: 64, mb: 3 }} />
+              <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
+                Ready to Transform Your Career?
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
+                Join thousands of students who discovered their dream careers with Aspire
+              </Typography>
+              <Button 
+                variant="contained" 
+                size="large"
+                onClick={() => setShowQuiz(true)}
+                startIcon={<RocketLaunch />}
+                sx={{ 
+                  py: 2, 
+                  px: 6,
+                  backgroundColor: 'white',
+                  color: '#6366f1',
+                  fontWeight: 'bold',
+                  fontSize: '1.1rem',
+                  '&:hover': {
+                    backgroundColor: '#f8fafc',
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Launch Your Career Journey
+              </Button>
+            </Box>
+          </Fade>
         </Container>
       </Box>
     </div>
