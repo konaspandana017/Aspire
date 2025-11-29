@@ -15,7 +15,9 @@ import {
   TableRow,
   Paper,
   Chip,
-  IconButton
+  IconButton,
+  Tabs,
+  Tab
 } from '@mui/material';
 import { 
   People, 
@@ -23,9 +25,14 @@ import {
   Event, 
   TrendingUp,
   Edit,
-  Delete
+  Delete,
+  Dashboard,
+  ManageAccounts,
+  Folder
 } from '@mui/icons-material';
 import Header from '../components/Header';
+import AdminAnalytics from '../components/AdminAnalytics';
+import ResourceUpload from '../components/ResourceUpload';
 
 const AdminDashboard = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -39,35 +46,50 @@ const AdminDashboard = ({ user, onLogout }) => {
   ];
 
   const users = [
-    { id: 1, name: 'John Student', email: 'john@student.com', sessions: 3, status: 'Active' },
-    { id: 2, name: 'Sarah Learner', email: 'sarah@student.com', sessions: 1, status: 'Active' },
-    { id: 3, name: 'Mike Explorer', email: 'mike@student.com', sessions: 0, status: 'Inactive' }
+    { id: 1, name: 'John Student', email: 'john@student.com', sessions: 3, status: 'Active', joinDate: '2024-01-15' },
+    { id: 2, name: 'Sarah Learner', email: 'sarah@student.com', sessions: 1, status: 'Active', joinDate: '2024-02-20' },
+    { id: 3, name: 'Mike Explorer', email: 'mike@student.com', sessions: 0, status: 'Inactive', joinDate: '2024-01-08' },
+    { id: 4, name: 'Emily Career', email: 'emily@student.com', sessions: 5, status: 'Active', joinDate: '2024-03-01' }
   ];
 
   const resources = [
-    { id: 1, title: 'Software Engineering Guide', type: 'PDF', downloads: 156 },
-    { id: 2, title: 'Career Assessment v2', type: 'Quiz', completions: 89 },
-    { id: 3, title: 'Resume Template Pack', type: 'Template', downloads: 203 }
+    { id: 1, title: 'Software Engineering Guide', type: 'PDF', downloads: 156, uploadDate: '2024-01-10' },
+    { id: 2, title: 'Career Assessment v2', type: 'Quiz', completions: 89, uploadDate: '2024-02-15' },
+    { id: 3, title: 'Resume Template Pack', type: 'Template', downloads: 203, uploadDate: '2024-01-22' },
+    { id: 4, title: 'Interview Preparation', type: 'Video', views: 312, uploadDate: '2024-03-05' }
   ];
+
+  const handleDeleteUser = (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      alert(`User ${userId} deleted successfully!`);
+    }
+  };
+
+  const handleDeleteResource = (resourceId) => {
+    if (window.confirm('Are you sure you want to delete this resource?')) {
+      alert(`Resource ${resourceId} deleted successfully!`);
+    }
+  };
 
   const renderOverview = () => (
     <Box>
-      <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+      <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 'bold' }}>
         Dashboard Overview
       </Typography>
       
+      {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card>
+            <Card sx={{ height: '100%', transition: '0.3s', '&:hover': { transform: 'translateY(-4px)' } }}>
               <CardContent sx={{ textAlign: 'center' }}>
-                <Box sx={{ color: `${stat.color}.main`, fontSize: 40 }}>
+                <Box sx={{ color: `${stat.color}.main`, fontSize: 40, mb: 1 }}>
                   {stat.icon}
                 </Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
                   {stat.value}
                 </Typography>
-                <Typography color="text.secondary">
+                <Typography color="text.secondary" variant="h6">
                   {stat.label}
                 </Typography>
               </CardContent>
@@ -76,12 +98,19 @@ const AdminDashboard = ({ user, onLogout }) => {
         ))}
       </Grid>
 
-      <Grid container spacing={3}>
+      {/* Analytics Component */}
+      <AdminAnalytics />
+
+      {/* Resource Upload Component */}
+      <ResourceUpload />
+
+      {/* Quick Stats */}
+      <Grid container spacing={3} sx={{ mt: 2 }}>
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Recent Users
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                <People sx={{ mr: 1 }} /> Recent Users
               </Typography>
               <TableContainer>
                 <Table size="small">
@@ -94,7 +123,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                   </TableHead>
                   <TableBody>
                     {users.slice(0, 3).map((user) => (
-                      <TableRow key={user.id}>
+                      <TableRow key={user.id} hover>
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.sessions}</TableCell>
                         <TableCell>
@@ -116,8 +145,8 @@ const AdminDashboard = ({ user, onLogout }) => {
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Popular Resources
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                <Folder sx={{ mr: 1 }} /> Popular Resources
               </Typography>
               <TableContainer>
                 <Table size="small">
@@ -130,13 +159,13 @@ const AdminDashboard = ({ user, onLogout }) => {
                   </TableHead>
                   <TableBody>
                     {resources.slice(0, 3).map((resource) => (
-                      <TableRow key={resource.id}>
+                      <TableRow key={resource.id} hover>
                         <TableCell>{resource.title}</TableCell>
                         <TableCell>
                           <Chip label={resource.type} size="small" variant="outlined" />
                         </TableCell>
                         <TableCell>
-                          {resource.downloads || resource.completions}
+                          {resource.downloads || resource.completions || resource.views}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -152,26 +181,39 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const renderUsers = () => (
     <Box>
-      <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+      <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 'bold' }}>
+        <ManageAccounts sx={{ mr: 1, verticalAlign: 'middle' }} />
         User Management
       </Typography>
+      
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h6" color="text.secondary">
+          Total Users: {users.length}
+        </Typography>
+        <Button variant="contained" color="primary">
+          Add New User
+        </Button>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Sessions</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell><strong>Name</strong></TableCell>
+              <TableCell><strong>Email</strong></TableCell>
+              <TableCell><strong>Sessions</strong></TableCell>
+              <TableCell><strong>Join Date</strong></TableCell>
+              <TableCell><strong>Status</strong></TableCell>
+              <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.id}>
+              <TableRow key={user.id} hover>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.sessions}</TableCell>
+                <TableCell>{user.joinDate}</TableCell>
                 <TableCell>
                   <Chip 
                     label={user.status} 
@@ -180,10 +222,15 @@ const AdminDashboard = ({ user, onLogout }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  <IconButton size="small" color="primary">
+                  <IconButton size="small" color="primary" title="Edit User">
                     <Edit />
                   </IconButton>
-                  <IconButton size="small" color="error">
+                  <IconButton 
+                    size="small" 
+                    color="error" 
+                    title="Delete User"
+                    onClick={() => handleDeleteUser(user.id)}
+                  >
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -197,39 +244,57 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const renderResources = () => (
     <Box>
-      <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+      <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 'bold' }}>
+        <Folder sx={{ mr: 1, verticalAlign: 'middle' }} />
         Resource Management
       </Typography>
-      <Box sx={{ mb: 2 }}>
-        <Button variant="contained">
+      
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h6" color="text.secondary">
+          Total Resources: {resources.length}
+        </Typography>
+        <Button variant="contained" color="primary">
           Add New Resource
         </Button>
       </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Engagement</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell><strong>Title</strong></TableCell>
+              <TableCell><strong>Type</strong></TableCell>
+              <TableCell><strong>Engagement</strong></TableCell>
+              <TableCell><strong>Upload Date</strong></TableCell>
+              <TableCell><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {resources.map((resource) => (
-              <TableRow key={resource.id}>
+              <TableRow key={resource.id} hover>
                 <TableCell>{resource.title}</TableCell>
                 <TableCell>
-                  <Chip label={resource.type} variant="outlined" size="small" />
+                  <Chip 
+                    label={resource.type} 
+                    color={resource.type === 'PDF' ? 'primary' : resource.type === 'Quiz' ? 'secondary' : 'success'}
+                    variant="outlined" 
+                    size="small" 
+                  />
                 </TableCell>
                 <TableCell>
-                  {resource.downloads || resource.completions}
+                  <strong>{resource.downloads || resource.completions || resource.views}</strong>
                 </TableCell>
+                <TableCell>{resource.uploadDate}</TableCell>
                 <TableCell>
-                  <IconButton size="small" color="primary">
+                  <IconButton size="small" color="primary" title="Edit Resource">
                     <Edit />
                   </IconButton>
-                  <IconButton size="small" color="error">
+                  <IconButton 
+                    size="small" 
+                    color="error" 
+                    title="Delete Resource"
+                    onClick={() => handleDeleteResource(resource.id)}
+                  >
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -244,33 +309,34 @@ const AdminDashboard = ({ user, onLogout }) => {
   return (
     <div>
       <Header user={user} onLogout={onLogout} />
-      <Container sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+          <Dashboard sx={{ mr: 2, verticalAlign: 'middle' }} />
           Admin Dashboard
         </Typography>
 
         {/* Navigation Tabs */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          <Button
-            variant={activeTab === 'overview' ? 'contained' : 'text'}
-            onClick={() => setActiveTab('overview')}
-            sx={{ mr: 2 }}
-          >
-            Overview
-          </Button>
-          <Button
-            variant={activeTab === 'users' ? 'contained' : 'text'}
-            onClick={() => setActiveTab('users')}
-            sx={{ mr: 2 }}
-          >
-            Users
-          </Button>
-          <Button
-            variant={activeTab === 'resources' ? 'contained' : 'text'}
-            onClick={() => setActiveTab('resources')}
-          >
-            Resources
-          </Button>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }}>
+          <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+            <Tab 
+              icon={<Dashboard />} 
+              iconPosition="start"
+              label="Overview" 
+              value="overview" 
+            />
+            <Tab 
+              icon={<ManageAccounts />} 
+              iconPosition="start"
+              label="User Management" 
+              value="users" 
+            />
+            <Tab 
+              icon={<Folder />} 
+              iconPosition="start"
+              label="Resource Management" 
+              value="resources" 
+            />
+          </Tabs>
         </Box>
 
         {/* Content */}
