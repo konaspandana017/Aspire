@@ -2,46 +2,82 @@
 export const quizQuestions = [
   {
     id: 1,
-    question: "What type of activities do you enjoy the most?",
+    question: 'Which activity sounds most appealing to you?',
     options: [
-      "Solving complex problems and coding",
-      "Helping and caring for people",
-      "Creating art, music, or writing",
-      "Analyzing data and research",
-      "Leading teams and making decisions"
+      'Designing and building software',
+      'Helping people and offering care',
+      'Creating visual or written content',
+      'Exploring data and research'
     ]
   },
   {
     id: 2,
-    question: "Which work environment do you prefer?",
+    question: 'What kind of daily task would you enjoy?',
     options: [
-      "Tech office with latest gadgets",
-      "Hospital, clinic, or healthcare setting",
-      "Creative studio or flexible space",
-      "Research lab or academic setting",
-      "Corporate office with team meetings"
+      'Solving algorithmic problems',
+      'Advising or counseling individuals',
+      'Sketching, composing, or drafting ideas',
+      'Running experiments and analyzing results'
     ]
   },
   {
     id: 3,
-    question: "What are your strongest skills?",
+    question: 'Which environment suits you best?',
     options: [
-      "Logical thinking and programming",
-      "Empathy and communication",
-      "Creativity and innovation",
-      "Analysis and attention to detail",
-      "Leadership and management"
+      'Fast-paced tech startup',
+      'Clinical or community setting',
+      'Creative studio or agency',
+      'Laboratory or analytics team'
     ]
   },
   {
     id: 4,
-    question: "Which subject interests you the most?",
+    question: 'What skill are you strongest at?',
     options: [
-      "Computer Science and Mathematics",
-      "Biology and Healthcare",
-      "Arts and Design",
-      "Science and Research",
-      "Business and Economics"
+      'Programming and system design',
+      'Empathy and communication',
+      'Visual/creative problem solving',
+      'Statistical thinking and analysis'
+    ]
+  },
+  {
+    id: 5,
+    question: 'What outcome motivates you most?',
+    options: [
+      'Shipping products that users love',
+      'Improving someone’s wellbeing',
+      'Producing expressive work that moves people',
+      'Discovering insights from complex data'
+    ]
+  },
+  {
+    id: 6,
+    question: 'Which tool would you pick to learn next?',
+    options: [
+      'A new programming framework (e.g., React)',
+      'Counseling or coaching certification',
+      'Design tools (Figma, Illustrator)',
+      'Data tools (Python, SQL, R)'
+    ]
+  },
+  {
+    id: 7,
+    question: 'How do you prefer to approach problems?',
+    options: [
+      'Break them into code-able steps',
+      'Listen and iterate with people',
+      'Prototype visually and iterate rapidly',
+      'Form hypotheses and test them quantitatively'
+    ]
+  },
+  {
+    id: 8,
+    question: 'Which of these career descriptions appeals most?',
+    options: [
+      'Software developer building apps and services',
+      'Counselor/health professional supporting clients',
+      'Designer / content creator shaping experiences',
+      'Data scientist or researcher answering questions with data'
     ]
   }
 ]
