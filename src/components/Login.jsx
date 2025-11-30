@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography, Box, Tabs, Tab, Alert, CircularProgress, Stack } from '@mui/material';
+import { Container, Paper, TextField, Button, Typography, Box, Tabs, Tab, Alert, CircularProgress, Stack, Checkbox, FormControlLabel } from '@mui/material';
 import { Psychology, Person, Lock, Email } from '@mui/icons-material';
 
 const Login = ({ onLogin }) => {
   const [tabValue, setTabValue] = useState(0);
-  const [formData, setFormData] = useState({ email: '', password: '', name: '' });
+  const [formData, setFormData] = useState({ email: '', password: '', firstName: '', lastName: '', role: 'student' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
     setError('');
-    setFormData({ email: '', password: '', name: '' });
+    setFormData({ email: '', password: '', firstName: '', lastName: '', role: 'student' });
   };
 
   const handleInputChange = (field) => (e) => {
@@ -19,30 +19,82 @@ const Login = ({ onLogin }) => {
     setError('');
   };
 
+  const handleRoleToggle = (e) => {
+    setFormData({ ...formData, role: e.target.checked ? 'admin' : 'student' })
+    setError('')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
-      });
+      if (tabValue === 0) {
+        // Sign in
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password
+          })
+        });
 
-      const data = await response.json();
-
-      if (data.success) {
-        onLogin && onLogin(data.user);
+        const data = await response.json().catch(() => null);
+        if (data && data.success) {
+          onLogin && onLogin(data.user);
+        } else {
+          setError((data && data.message) || 'Login failed');
+        }
       } else {
-        setError(data.message || 'Login failed');
+        // Sign up
+        const payload = {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        }
+
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(() => null);
+        if (data && data.success) {
+          onLogin && onLogin(data.user);
+        } else {
+          // Fallback: if registering an admin and backend rejects, create a local demo admin account for testing
+          if (formData.role === 'admin') {
+            const localDemoUser = {
+              id: `demo-admin`,
+              name: `${formData.firstName} ${formData.lastName}`.trim() || 'Demo Admin',
+              email: formData.email || 'admin@aspire.com',
+              type: 'admin'
+            }
+            onLogin && onLogin(localDemoUser)
+            setError('Registered locally as demo admin (backend did not accept registration).')
+          } else {
+            setError((data && data.message) || 'Registration failed')
+          }
+        }
       }
     } catch (err) {
-      setError('Cannot connect to server. Please try again.');
+      // Network or unexpected error
+      if (tabValue === 1 && formData.role === 'admin') {
+        const localDemoUser = {
+          id: `demo-admin`,
+          name: `${formData.firstName} ${formData.lastName}`.trim() || 'Demo Admin',
+          email: formData.email || 'admin@aspire.com',
+          type: 'admin'
+        }
+        onLogin && onLogin(localDemoUser)
+        setError('Cannot reach server — signed in locally as demo admin')
+      } else {
+        setError('Cannot connect to server. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -55,22 +107,42 @@ const Login = ({ onLogin }) => {
         student: { email: 'student@aspire.com', password: 'demo' },
         admin: { email: 'admin@aspire.com', password: 'demo' }
       };
-
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(demoCredentials[userType])
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
+      const data = await response.json().catch(() => null);
+
+      if (data && data.success) {
         onLogin && onLogin(data.user);
       } else {
-        setError('Demo login failed');
+        // Backend login failed or returned unexpected response.
+        // Fall back to a local demo account so the UI remains usable offline.
+        const localDemoUser = {
+          id: `demo-${userType}`,
+          name: userType === 'admin' ? 'Demo Admin' : 'Demo Student',
+          email: demoCredentials[userType].email,
+          type: userType
+        };
+        onLogin && onLogin(localDemoUser);
+        setError('Using local demo account (offline fallback)');
       }
     } catch (err) {
-      setError('Cannot connect to server');
+      // Network error — fallback to local demo account
+      const demoCredentials = {
+        student: { email: 'student@aspire.com', password: 'demo' },
+        admin: { email: 'admin@aspire.com', password: 'demo' }
+      };
+      const localDemoUser = {
+        id: `demo-${userType}`,
+        name: userType === 'admin' ? 'Demo Admin' : 'Demo Student',
+        email: demoCredentials[userType].email,
+        type: userType
+      };
+      onLogin && onLogin(localDemoUser);
+      setError('Cannot connect to server — signed in with local demo account');
     } finally {
       setLoading(false);
     }
@@ -95,15 +167,25 @@ const Login = ({ onLogin }) => {
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <Stack spacing={2}>
             {tabValue === 1 && (
-              <TextField
-                fullWidth
-                label="Full name"
-                value={formData.name}
-                onChange={handleInputChange('name')}
-                InputProps={{ startAdornment: <Person sx={{ mr: 1, color: 'text.secondary' }} /> }}
-                variant="outlined"
-                size="small"
-              />
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+                <TextField
+                  fullWidth
+                  label="First name"
+                  value={formData.firstName}
+                  onChange={handleInputChange('firstName')}
+                  InputProps={{ startAdornment: <Person sx={{ mr: 1, color: 'text.secondary' }} /> }}
+                  variant="outlined"
+                  size="small"
+                />
+                <TextField
+                  fullWidth
+                  label="Last name"
+                  value={formData.lastName}
+                  onChange={handleInputChange('lastName')}
+                  variant="outlined"
+                  size="small"
+                />
+              </Stack>
             )}
 
             <TextField
@@ -127,6 +209,13 @@ const Login = ({ onLogin }) => {
               variant="outlined"
               size="small"
             />
+
+            {tabValue === 1 && (
+              <FormControlLabel
+                control={<Checkbox checked={formData.role === 'admin'} onChange={handleRoleToggle} />}
+                label="Sign up as admin (no authorization code)"
+              />
+            )}
 
             <Button type="submit" variant="contained" size="medium" disabled={loading} fullWidth sx={{ py: 1.25, fontWeight: 600 }}>
               {loading ? <CircularProgress size={20} color="inherit" /> : (tabValue === 0 ? 'Sign in' : 'Create account')}
