@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography, Box, Tabs, Tab, Alert, CircularProgress, Stack, Checkbox, FormControlLabel } from '@mui/material';
+import { Container, Paper, TextField, Button, Typography, Box, Tabs, Tab, Alert, CircularProgress, Stack } from '@mui/material';
 import { Psychology, Person, Lock, Email } from '@mui/icons-material';
 
 const Login = ({ onLogin }) => {
   const [tabValue, setTabValue] = useState(0);
-  const [formData, setFormData] = useState({ email: '', password: '', firstName: '', lastName: '', role: 'student' });
+  const [formData, setFormData] = useState({ email: '', password: '', firstName: '', lastName: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
     setError('');
-    setFormData({ email: '', password: '', firstName: '', lastName: '', role: 'student' });
+    setFormData({ email: '', password: '', firstName: '', lastName: '' });
   };
 
   const handleInputChange = (field) => (e) => {
     setFormData({ ...formData, [field]: e.target.value });
     setError('');
   };
-
-  const handleRoleToggle = (e) => {
-    setFormData({ ...formData, role: e.target.checked ? 'admin' : 'student' })
-    setError('')
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,13 +42,12 @@ const Login = ({ onLogin }) => {
           setError((data && data.message) || 'Login failed');
         }
       } else {
-        // Sign up
+        // Sign up — only collect name, email, password (no admin role or access code)
         const payload = {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          password: formData.password,
-          role: formData.role
+          password: formData.password
         }
 
         const response = await fetch('http://localhost:5000/api/auth/register', {
@@ -66,35 +60,12 @@ const Login = ({ onLogin }) => {
         if (data && data.success) {
           onLogin && onLogin(data.user);
         } else {
-          // Fallback: if registering an admin and backend rejects, create a local demo admin account for testing
-          if (formData.role === 'admin') {
-            const localDemoUser = {
-              id: `demo-admin`,
-              name: `${formData.firstName} ${formData.lastName}`.trim() || 'Demo Admin',
-              email: formData.email || 'admin@aspire.com',
-              type: 'admin'
-            }
-            onLogin && onLogin(localDemoUser)
-            setError('Registered locally as demo admin (backend did not accept registration).')
-          } else {
-            setError((data && data.message) || 'Registration failed')
-          }
+          setError((data && data.message) || 'Registration failed')
         }
       }
     } catch (err) {
       // Network or unexpected error
-      if (tabValue === 1 && formData.role === 'admin') {
-        const localDemoUser = {
-          id: `demo-admin`,
-          name: `${formData.firstName} ${formData.lastName}`.trim() || 'Demo Admin',
-          email: formData.email || 'admin@aspire.com',
-          type: 'admin'
-        }
-        onLogin && onLogin(localDemoUser)
-        setError('Cannot reach server — signed in locally as demo admin')
-      } else {
-        setError('Cannot connect to server. Please try again.');
-      }
+      setError('Cannot connect to server. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -210,12 +181,7 @@ const Login = ({ onLogin }) => {
               size="small"
             />
 
-            {tabValue === 1 && (
-              <FormControlLabel
-                control={<Checkbox checked={formData.role === 'admin'} onChange={handleRoleToggle} />}
-                label="Sign up as admin (no authorization code)"
-              />
-            )}
+            {/* admin sign-up option removed — signup collects only name, email and password */}
 
             <Button type="submit" variant="contained" size="medium" disabled={loading} fullWidth sx={{ py: 1.25, fontWeight: 600 }}>
               {loading ? <CircularProgress size={20} color="inherit" /> : (tabValue === 0 ? 'Sign in' : 'Create account')}
