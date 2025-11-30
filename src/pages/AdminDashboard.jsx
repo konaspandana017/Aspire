@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ResponsiveContainer, AreaChart, Area, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { 
   Container, 
   Grid, 
@@ -56,8 +57,8 @@ const AdminDashboard = ({ user, onLogout }) => {
     new Date(today.getFullYear(), today.getMonth(), today.getDate())
   ]
   const last3Labels = dates.map(formatDate)
-  const last3NewUsers = [5, 12, 8]
-  const last3Sessions = [22, 30, 27]
+  const last3NewUsersSample = [5, 12, 8]
+  const last3SessionsSample = [22, 30, 27]
 
   const [notifications, setNotifications] = useState([
     { id: 1, text: 'New user signed up: alice@example.com', time: '2h ago', read: false },
@@ -68,22 +69,63 @@ const AdminDashboard = ({ user, onLogout }) => {
   const unreadCount = notifications.filter(n => !n.read).length
 
   const markAllRead = () => setNotifications(notifications.map(n => ({ ...n, read: true })))
+  // API endpoints you can change — if endpoints respond, we'll use live data
+  const METRICS_API = '/api/admin/metrics'
+  const NOTIFICATIONS_API = '/api/admin/notifications'
 
-  // Simple inline SVG sparkline for small charts
-  const SmallLineChart = ({ data, labels, color = '#2563eb' }) => {
-    const w = 240
-    const h = 60
-    const max = Math.max(...data) || 1
-    const points = data.map((v, i) => {
-      const x = (i / (data.length - 1)) * w
-      const y = h - (v / max) * (h - 8) - 4
-      return `${x},${y}`
-    }).join(' ')
+  const [last3NewUsers, setLast3NewUsers] = useState(last3NewUsersSample)
+  const [last3Sessions, setLast3Sessions] = useState(last3SessionsSample)
+
+  // Try to fetch metrics and notifications from backend; fall back to sample data on error
+  useEffect(() => {
+    let mounted = true
+
+    fetch(METRICS_API)
+      .then(res => res.json())
+      .then(data => {
+        if (!mounted || !data) return
+        // Expecting an object like { last3NewUsers: [...], last3Sessions: [...] }
+        if (Array.isArray(data.last3NewUsers) && Array.isArray(data.last3Sessions)) {
+          setLast3NewUsers(data.last3NewUsers)
+          setLast3Sessions(data.last3Sessions)
+        }
+      }).catch(() => {})
+
+    fetch(NOTIFICATIONS_API)
+      .then(res => res.json())
+      .then(data => {
+        if (!mounted || !data) return
+        // Expecting array of notifications
+        if (Array.isArray(data)) {
+          setNotifications(data)
+        }
+      }).catch(() => {})
+
+    return () => { mounted = false }
+  }, [])
+
+  // Recharts-based small area chart wrapper
+  const SmallAreaChart = ({ data, labels, color = '#2563eb' }) => {
+    const chartData = data.map((v, i) => ({ name: labels[i] || `P${i+1}`, value: v }))
 
     return (
-      <svg width="100%" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
-        <polyline fill="none" stroke={color} strokeWidth="2" points={points} strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <div style={{ width: '100%', height: 120 }}>
+        <ResponsiveContainer>
+          <AreaChart data={chartData} margin={{ top: 6, right: 6, left: 6, bottom: 6 }}>
+            <defs>
+              <linearGradient id={`grad-${color.replace('#','')}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={color} stopOpacity={0.2} />
+                <stop offset="95%" stopColor={color} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.06} />
+            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <YAxis hide />
+            <Tooltip formatter={(value) => [value, 'Value']} />
+            <Area type="monotone" dataKey="value" stroke={color} fill={`url(#grad-${color.replace('#','')})`} strokeWidth={2} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     )
   }
 
